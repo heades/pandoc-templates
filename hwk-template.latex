@@ -1,0 +1,154 @@
+$document-metadata.latex()$
+$passoptions.latex()$
+\documentclass[
+$for(babel-otherlangs)$
+  $babel-otherlangs$,
+$endfor$
+$if(babel-lang)$
+  $babel-lang$,
+$endif$
+$if(fontsize)$
+  $fontsize$,
+$endif$
+$if(papersize)$
+  $papersize$paper,
+$endif$
+$for(classoption)$
+  $classoption$$sep$,
+$endfor$
+]{$documentclass$}
+
+$if(fullpage)$
+\usepackage{fullpage}
+$endif$
+
+\usepackage{xcolor}
+
+$if(geometry)$
+\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+$endif$
+\usepackage{amsmath,amssymb}
+$if(cancel)$
+\usepackage{cancel}
+$endif$
+$--
+$-- section numbering
+$--
+$if(numbersections)$
+\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+$else$
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+$fonts.latex()$
+$font-settings.latex()$
+$common.latex()$
+$for(header-includes)$
+$header-includes$
+$endfor$
+$after-header-includes.latex()$
+$hypersetup.latex()$
+
+%% Color of urls:
+\hypersetup{
+  colorlinks=true,
+  urlcolor=[RGB]{0,114,178}
+}
+
+$if(pdf-trailer-id)$
+
+\ifXeTeX
+\special{pdf:trailerid [ $pdf-trailer-id$ ]}
+\fi
+\ifPDFTeX
+\pdftrailerid{}
+\pdftrailer{/ID [ $pdf-trailer-id$ ]}
+\fi
+\ifLuaTeX
+\pdfvariable trailerid {[ $pdf-trailer-id$ ]}
+\fi
+$endif$
+
+$if(title)$
+\title{$title$}
+$endif$
+
+$if(date)$
+\date{$date$}
+$else$
+\date{}
+$endif$
+
+$if(course)$
+  $if(due-date)$    
+      \usepackage{etoolbox}
+      \makeatletter
+      \providecommand{\subtitle}[1]{% add subtitle to \maketitle
+        \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+      }
+      \makeatother
+      \subtitle{$course$\\\textbf{Due: $due-date$}}
+  $else$    
+      \usepackage{etoolbox}
+      \makeatletter
+      \providecommand{\subtitle}[1]{% add subtitle to \maketitle
+        \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+      }
+      \makeatother
+      \subtitle{$course$}
+  $endif$
+$else$
+  $if(due-date)$    
+      \usepackage{etoolbox}
+      \makeatletter
+      \providecommand{\subtitle}[1]{% add subtitle to \maketitle
+        \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+      }
+      \makeatother
+      \subtitle{\textbf{Due: $due-date$}}
+  $endif$
+$endif$
+
+\begin{document}
+$if(title)$
+\maketitle
+
+\vspace{-0.5in}
+$endif$
+
+$if(instructions)$
+\begin{center}
+\textbf{\large{Instructions}}\\[3pt]
+\begin{minipage}{0.6\textwidth}
+$instructions$
+\end{minipage}
+\end{center}
+\vspace{10pt}
+$endif$
+
+$for(include-before)$
+$include-before$
+$endfor$
+
+$body$
+
+$if(nocite-ids)$
+\nocite{$for(nocite-ids)$$it$$sep$, $endfor$}
+$endif$
+$if(natbib)$
+$if(bibliography)$
+$if(biblio-title)$
+\renewcommand\refname{$biblio-title$}
+$endif$
+\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+
+$endif$
+$endif$
+$if(biblatex)$
+\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+
+$endif$
+$for(include-after)$
+$include-after$
+
+$endfor$
+\end{document}
