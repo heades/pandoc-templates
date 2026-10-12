@@ -27,7 +27,10 @@ $endif$
 $if(geometry)$
 \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
 $endif$
+
 \usepackage{amsmath,amssymb}
+\usepackage{array}
+
 $if(cancel)$
 \usepackage{cancel}
 $endif$
@@ -67,6 +70,10 @@ $if(pdf-trailer-id)$
 \pdfvariable trailerid {[ $pdf-trailer-id$ ]}
 \fi
 $endif$
+
+\newcommand{\completionbox}{{\large \(\square\)}}
+\newcommand{\scorebox}[1]{\fbox{\rule{0pt}{1.2cm}\hspace{1.8cm}/#1}}
+\newcommand{\totalbox}{\fbox{\rule{0pt}{1.2cm}\hspace{1.8cm}/100}}
 
 $if(title)$
 \title{$title$}
